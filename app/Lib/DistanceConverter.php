@@ -8,37 +8,46 @@ class DistanceConverter {
   private $toUnit = null;
 
   public function convert($distance) {
-    if(!$this->fromUnit || !$this->toUnit || $this->fromUnit == $this->toUnit) {
-      return $distance;
-    }
     switch($this->fromUnit) {
       case 'meter': 
-        if($this->toUnit == 'km') {
-          return $distance / 1000;    
-        }
-        if($this->toUnit == 'mile') {
-          return $distance / 1609.34;    
-        }
-        return $distance;
+        return $this->convertToMeter($distance);
       case 'km': 
-          if($this->toUnit == 'meter') {
-            return $distance * 1000;    
-          }
-          if($this->toUnit == 'mile') {
-            return $distance / 0.621371;    
-          }
-          return $distance;
+        return $this->convertToKm($distance);
       case 'mile': 
-            if($this->toUnit == 'meter') {
-              return $distance * 1609.34;    
-            }
-            if($this->toUnit == 'km') {
-              return $distance * 1.60934;    
-            }
-            return $distance;
+        return $this->convertToMile($distance);
       default:
         return $distance;
     }
+  }
+
+  private function convertToMeter($distance) {
+    if($this->toUnit == 'km') {
+      return $distance / 1000;    
+    }
+    if($this->toUnit == 'mile') {
+      return $distance / 1609.34;    
+    }
+    return $distance;
+  }
+
+  public function convertToKm($distance) {
+    if($this->toUnit == 'meter') {
+      return $distance * 1000;    
+    }
+    if($this->toUnit == 'mile') {
+      return $distance / 0.621371;    
+    }
+    return $distance;
+  }
+
+  public function convertToMile($distance) {
+    if($this->toUnit == 'meter') {
+      return $distance * 1609.34;    
+    }
+    if($this->toUnit == 'km') {
+      return $distance * 1.60934;    
+    }
+    return $distance;
   }
 
   public function fromMeter() {
