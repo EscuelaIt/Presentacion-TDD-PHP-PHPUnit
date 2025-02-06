@@ -7,47 +7,26 @@ class DistanceConverter {
   private $fromUnit = null;
   private $toUnit = null;
 
+  private $factor = [
+    'mile' => [
+        'km' => 1.60934,      // 1 milla = 1.60934 kilómetros
+        'meter' => 1609.34,   // 1 milla = 1609.34 metros
+    ],
+    'km' => [
+        'mile' => 0.621371,   // 1 kilómetro = 0.621371 millas
+        'meter' => 1000,      // 1 kilómetro = 1000 metros
+    ],
+    'meter' => [
+        'mile' => 0.000621371, // 1 metro = 0.000621371 millas
+        'km' => 0.001,         // 1 metro = 0.001 kilómetros
+    ],
+  ];
+
   public function convert($distance) {
-    switch($this->fromUnit) {
-      case 'meter': 
-        return $this->convertToMeter($distance);
-      case 'km': 
-        return $this->convertToKm($distance);
-      case 'mile': 
-        return $this->convertToMile($distance);
-      default:
-        return $distance;
+    if(! $this->fromUnit || ! $this->toUnit || $this->fromUnit == $this->toUnit) {
+      return $distance;
     }
-  }
-
-  private function convertToMeter($distance) {
-    if($this->toUnit == 'km') {
-      return $distance / 1000;    
-    }
-    if($this->toUnit == 'mile') {
-      return $distance / 1609.34;    
-    }
-    return $distance;
-  }
-
-  public function convertToKm($distance) {
-    if($this->toUnit == 'meter') {
-      return $distance * 1000;    
-    }
-    if($this->toUnit == 'mile') {
-      return $distance / 0.621371;    
-    }
-    return $distance;
-  }
-
-  public function convertToMile($distance) {
-    if($this->toUnit == 'meter') {
-      return $distance * 1609.34;    
-    }
-    if($this->toUnit == 'km') {
-      return $distance * 1.60934;    
-    }
-    return $distance;
+    return $distance * $this->factor[$this->fromUnit][$this->toUnit];
   }
 
   public function fromMeter() {
