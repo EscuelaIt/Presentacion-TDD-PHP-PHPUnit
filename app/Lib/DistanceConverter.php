@@ -2,6 +2,8 @@
 
 namespace App\Lib;
 
+use InvalidArgumentException;
+
 class DistanceConverter {
 
   private $fromUnit = null;
@@ -57,5 +59,27 @@ class DistanceConverter {
   public function toMile() {
     $this->toUnit = 'mile';
     return $this;
+  }
+
+  public function from($unit) {
+    if(!in_array($unit, $this->validUnits())) {
+      throw new InvalidArgumentException("From unit not supported: $unit");
+    }
+
+    $this->fromUnit = $unit;
+    return $this;
+  }
+
+  public function to($unit) {
+    if(!in_array($unit, $this->validUnits())) {
+      throw new InvalidArgumentException("To unit not supported: $unit");
+    }
+
+    $this->toUnit = $unit;
+    return $this;
+  }
+
+  private function validUnits() {
+    return array_keys($this->factor);
   }
 }
